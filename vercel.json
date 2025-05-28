@@ -1,0 +1,21 @@
+{
+    "github": {
+      "silent": true
+    },
+    "functions": {
+      "js/app.js": {
+        "maxDuration": 30
+      }
+    },
+    "headers": [
+      {
+        "source": "/(.*)",
+        "headers": [
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          }
+        ]
+      }
+    ]
+  }

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FreshWave News</title>
+  <!-- Tailwind build -->
+  <link rel="stylesheet" href="dist/styles.css" />
+  <!-- Favicon -->
+  <link rel="icon" href="https://www.svgrepo.com/show/532190/waves.svg" />
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <header class="bg-white shadow sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+      <h1 class="text-2xl font-bold tracking-tight">FreshWave<span class="text-indigo-600">News</span></h1>
+      <button id="refresh" class="px-4 py-2 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition">
+        Refresh
+      </button>
+    </div>
+  </header>
+
+  <main id="news" class="max-w-7xl mx-auto px-4 space-y-16 py-6">
+
+    <!-- Sections with individual Load More buttons -->
+    <section id="design">
+      <h2 class="section-title">Design</h2>
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-feed></div>
+      <div class="text-center mt-6">
+        <button id="more-design" class="px-6 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 transition">
+          Load More Design News
+        </button>
+      </div>
+    </section>
+
+    <section id="wellness">
+      <h2 class="section-title">Fitness, Surf, Yoga, Health & Wellness</h2>
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-feed></div>
+      <div class="text-center mt-6">
+        <button id="more-wellness" class="px-6 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 transition">
+          Load More Wellness News
+        </button>
+      </div>
+    </section>
+
+    <section id="things-to-do">
+      <h2 class="section-title">Things To Do & Food Culture (NYC)</h2>
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-feed></div>
+      <div class="text-center mt-6">
+        <button id="more-things-to-do" class="px-6 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 transition">
+          Load More NYC News
+        </button>
+      </div>
+    </section>
+
+    <section id="local-nyc">
+      <h2 class="section-title">Local – NYC</h2>
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-feed></div>
+      <div class="text-center mt-6">
+        <button id="more-local-nyc" class="px-6 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 transition">
+          Load More Local News
+        </button>
+      </div>
+    </section>
+
+    <section id="tech-ai">
+      <h2 class="section-title">Tech & AI</h2>
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-feed></div>
+      <div class="text-center mt-6">
+        <button id="more-tech-ai" class="px-6 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 transition">
+          Load More Tech News
+        </button>
+      </div>
+    </section>
+
+    <section id="entertainment">
+      <h2 class="section-title">Entertainment & Music</h2>
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-feed></div>
+      <div class="text-center mt-6">
+        <button id="more-entertainment" class="px-6 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 transition">
+          Load More Entertainment News
+        </button>
+      </div>
+    </section>
+
+    <section id="top-stories">
+      <h2 class="section-title">Top Stories</h2>
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-feed></div>
+      <div class="text-center mt-6">
+        <button id="more-top-stories" class="px-6 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 transition">
+          Load More Top Stories
+        </button>
+      </div>
+    </section>
+
+    <section id="style-art">
+      <h2 class="section-title">Men's Style & Art</h2>
+      <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3" data-feed></div>
+      <div class="text-center mt-6">
+        <button id="more-style-art" class="px-6 py-2 rounded-lg bg-gray-100 text-gray-700 font-medium hover:bg-gray-200 transition">
+          Load More Style & Art News
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Global More News Button -->
+  <div class="max-w-7xl mx-auto px-4 py-8 text-center">
+    <button id="more-news" class="px-8 py-3 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition shadow-lg hover:shadow-xl" style="display: none;">
+      Load More News (All Sections)
+    </button>
+  </div>
+
+  <footer class="bg-white border-t mt-20">
+    <div class="max-w-7xl mx-auto px-4 py-8 text-center text-sm text-gray-500">
+      © <span id="year"></span> FreshWave News — last updated <span id="updated"></span>
+    </div>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

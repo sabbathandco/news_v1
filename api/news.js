@@ -62,7 +62,10 @@ export default async function handler(req, res) {
       }
   
       const data = await response.json();
-      const content = data.choices?.[0]?.message?.content ?? "[]";
+      let content = data.choices?.[0]?.message?.content ?? "[]";
+      
+      // Clean up code blocks from OpenAI response
+      content = content.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '');
   
       res.status(200).json({ content });
     } catch (error) {

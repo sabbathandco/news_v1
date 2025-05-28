@@ -2,11 +2,6 @@
     "github": {
       "silent": true
     },
-    "functions": {
-      "js/app.js": {
-        "maxDuration": 30
-      }
-    },
     "headers": [
       {
         "source": "/(.*)",

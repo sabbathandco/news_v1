@@ -22,32 +22,33 @@ export default async function handler(req, res) {
     if (!prompt) return res.status(400).json({ error: 'Prompt is required' });
 
     const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-    if (!OPENAI_API_KEY) return res.status(500).json({ error: 'OpenAI API key not configured' });
-
-    /* ────────── OPENAI CALL ────────── */
+    const model          = "gpt-4o";                      // ☝ switch to general model
+  
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method:  "POST",
       headers: {
-        "Content-Type":  "application/json",
-        Authorization:   `Bearer ${OPENAI_API_KEY}`
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${OPENAI_API_KEY}`,
       },
       body: JSON.stringify({
-        model: "gpt-4o-search-preview",
-
-        /* 1️⃣  web-search settings */
-        web_search_options: {
-          user_location:      location,
+        model,
+        tools: [{
+          type: "web_search_preview",
+          user_location: {
+            type:     "approximate",
+            country:  "US",
+            city:     "New York",
+            region:   "NY",
+            timezone: "America/New_York"
+          },
           search_context_size: "medium"
-        },
-
-        /* 2️⃣  force pure-JSON output */
-        response_format: { type: "json_object" },
-
-        /* 3️⃣  prompts */
+        }],
+        tool_choice: { type: "web_search_preview" },      // force search
+        response_format: { type: "json_object" },         // now supported
         messages: [
           {
             role:    "system",
-            content: "Return ONLY valid JSON – an array of objects with keys headline, summary, url, paywall (boolean). No markdown."
+            content: "Return ONLY valid JSON – an array of objects with keys headline, summary, url, paywall."
           },
           { role: "user", content: prompt }
         ]

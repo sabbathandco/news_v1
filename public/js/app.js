@@ -1,18 +1,5 @@
-/* FreshWave News – curates upbeat stories via OpenAI web‑search preview model */
+/* FreshWave News – curates upbeat stories via serverless function */
 import { format } from "https://cdn.skypack.dev/date-fns";
-
-// Use environment variable for API key, with fallback for local development
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY || "your-local-key-here";
-const model = "gpt-4o-search-preview";
-const location = {
-  type: "approximate",
-  approximate: {
-    country: "US",
-    city: "New York",
-    region: "NY",
-    timezone: "America/New_York"
-  }
-};
 
 const sections = [
     {
@@ -93,15 +80,6 @@ const sections = [
 let loadedArticles = new Set(); // Track loaded articles to prevent duplicates
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Check if API key is available
-  if (!OPENAI_API_KEY || OPENAI_API_KEY === "your-local-key-here") {
-    console.error("OpenAI API key not found. Please set the OPENAI_API_KEY environment variable.");
-    document.querySelectorAll("[data-feed]").forEach(el => {
-      el.innerHTML = '<p class="text-red-600">API key not configured. Please check your environment variables.</p>';
-    });
-    return;
-  }
-
   loadAllNews();
   document.getElementById("refresh").addEventListener("click", () => {
     clearAll();
@@ -455,30 +433,23 @@ async function loadSection({ id, prompt }, isMoreNews = false) {
     prompt;
   
   try {
-    const res = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
+    // Call our serverless function instead of OpenAI directly
+    const response = await fetch('/api/news', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${OPENAI_API_KEY}`
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model,
-        web_search_options: {
-          user_location: location,
-          search_context_size: "medium"
-        },
-        messages: [
-          { role: "user", content: modifiedPrompt }
-        ]
+        prompt: modifiedPrompt
       })
     });
 
-    if (!res.ok) {
-      throw new Error(`HTTP error! status: ${res.status}`);
+    if (!response.ok) {
+      throw new Error(`API error: ${response.status} ${response.statusText}`);
     }
 
-    const data = await res.json();
-    const raw = data.choices?.[0]?.message?.content ?? "[]";
+    const data = await response.json();
+    const raw = data.content || "[]";
     
     console.log(`Raw response for ${id}:`, raw); // Debug log
     
@@ -555,6 +526,8 @@ async function loadSection({ id, prompt }, isMoreNews = false) {
 
   } catch (err) {
     console.error("Error fetching section", id, err);
-    feed.innerHTML = '<p class="text-red-600">Failed to load news — please try again later.</p>';
+    if (!isMoreNews) {
+      feed.innerHTML = '<p class="text-red-600">Failed to load news — please try again later.</p>';
+    }
   }
 }

@@ -99,18 +99,19 @@ export default async function handler(req, res) {
     let slice = articles.slice(offset, offset + count);
 
     /* 4️⃣ Back-fill with GPT search if slice still short */
-    if (slice.length < count && prompt) {
-      try {
-        const gptRes = await handlerNews(
-          { method: "POST", body: { prompt } },
-          mockRes()
-        );
-        const gptItems = JSON.parse(gptRes.payload || "[]");
-        slice = slice.concat(gptItems).slice(0, count);
-      } catch (err) {
-        console.error("GPT back-fill failed:", err);
-      }
-    }
+        if (slice.length < count && prompt) {
+              try {
+                const mock = mockRes();                     // ⬅️ capture payload here
+                await handlerNews(
+                  { method: "POST", body: { prompt } },
+                  mock
+                );
+                        const gptItems = JSON.parse(mock.payload || "[]");
+                        slice = slice.concat(gptItems).slice(0, count);
+                      } catch (err) {
+                        console.error("GPT back-fill failed:", err);
+                      }
+                    }
 
     /* 5️⃣ Return to client */
     res.status(200).json({ items: slice });

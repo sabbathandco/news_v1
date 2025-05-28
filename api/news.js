@@ -43,18 +43,36 @@ export default async function handler(req, res) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${OPENAI_API_KEY}`
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
         },
         body: JSON.stringify({
           model,
+      
+          /* 👉 1. web-search settings */
           web_search_options: {
-            user_location: location,
-            search_context_size: "medium"
+            user_location: {
+              type: "approximate",
+              country: "US",
+              city: "New York",
+              region: "NY",
+              timezone: "America/New_York",
+            },
+            search_context_size: "medium",
           },
+      
+          /* 👉 2. FORCE pure-JSON output */
+          response_format: { type: "json_object" },
+      
+          /* 👉 3. Prompts */
           messages: [
-            { role: "user", content: prompt }
-          ]
-        })
+            {
+              role: "system",
+              content:
+                "Return ONLY valid JSON – an array of objects with keys headline, summary, url, paywall (boolean). No markdown.",
+            },
+            { role: "user", content: prompt },
+          ],
+        }),
       });
   
       if (!response.ok) {
